@@ -3,5 +3,10 @@ cmds = [
     "composer install --no-dev --optimize-autoloader --no-interaction"
 ]
 
+[phases.build]
+cmds = [
+    "echo 'Skipping npm build - using pre-built assets in public/build'"
+]
+
 [start]
 cmd = "touch database/database.sqlite && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"
