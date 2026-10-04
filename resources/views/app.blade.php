@@ -18,7 +18,7 @@
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased font-sans selection:bg-teal-600 selection:text-white min-h-screen">
-    <div id="root"></div>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans selection:bg-teal-600 selection:text-white min-h-screen overflow-x-hidden">
+    <div id="root" class="overflow-x-hidden min-h-screen"></div>
 </body>
 </html>

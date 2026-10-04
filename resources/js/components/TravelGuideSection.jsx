@@ -140,51 +140,25 @@ export default function TravelGuideSection() {
                                 </div>
                             </div>
 
-                            {/* Mobile Carousel Controls */}
-                            <div className="flex md:hidden items-center justify-between px-1">
-                                <span className="text-[11px] text-slate-500 font-medium">Swipe transit legs or use arrows:</span>
-                                <div className="flex items-center gap-1.5">
-                                    <button
-                                        type="button"
-                                        onClick={() => scrollRef(transitScrollRef, 'prev', 260)}
-                                        className="w-7 h-7 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
-                                        aria-label="Previous route"
-                                    >
-                                        <ChevronLeft className="w-3.5 h-3.5" />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => scrollRef(transitScrollRef, 'next', 260)}
-                                        className="w-7 h-7 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
-                                        aria-label="Next route"
-                                    >
-                                        <ChevronRight className="w-3.5 h-3.5" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Routes List (Mobile: 1 horizontal line, Desktop: 2-col grid) */}
-                            <div 
-                                ref={transitScrollRef}
-                                className="flex md:grid md:grid-cols-2 gap-3 sm:gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar pb-2 md:pb-0 touch-pan-x"
-                            >
+                            {/* Routes List (Mobile: clean 1-col compact list, Desktop: 2-col grid) */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
                                 {TRAVEL_GUIDELINES.howToGetThere.map((route, idx) => (
                                     <div 
                                         key={idx} 
-                                        className="shrink-0 w-[80vw] max-w-[290px] md:w-auto snap-center p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-teal-300 transition-colors flex flex-col justify-between"
+                                        className="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200 hover:border-teal-300 transition-colors flex flex-col justify-between"
                                     >
                                         <div>
                                             <div className="flex items-center justify-between">
-                                                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-teal-700">Leg {idx + 1}</span>
+                                                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-teal-700">Leg {idx + 1}</span>
                                                 <span className="text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-md bg-white text-slate-700 border border-slate-200 flex items-center gap-1 shadow-2xs">
                                                     <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-teal-600 shrink-0" />
                                                     <span>{route.time}</span>
                                                 </span>
                                             </div>
-                                            <h4 className="text-sm sm:text-base font-bold text-slate-900 font-display mt-2">{route.route}</h4>
-                                            <p className="text-[11px] sm:text-xs font-semibold text-slate-600 mt-1">Vehicle: {route.mode}</p>
+                                            <h4 className="text-xs sm:text-base font-bold text-slate-900 font-display mt-1.5">{route.route}</h4>
+                                            <p className="text-[10px] sm:text-xs font-semibold text-slate-600 mt-0.5">Vehicle: {route.mode}</p>
                                         </div>
-                                        <p className="text-[11px] sm:text-xs text-slate-500 mt-3 pt-2 border-t border-slate-200">
+                                        <p className="text-[10px] sm:text-xs text-slate-500 mt-2 pt-1.5 border-t border-slate-200">
                                             <strong>Estimated Fare:</strong> {route.cost}
                                         </p>
                                     </div>
@@ -196,42 +170,16 @@ export default function TravelGuideSection() {
                     {/* 2. Culture & Eco Rules Tab */}
                     {openTab === 'etiquette' && (
                         <div className="space-y-3 animate-in fade-in duration-200">
-                            {/* Mobile Carousel Controls */}
-                            <div className="flex md:hidden items-center justify-between px-1">
-                                <span className="text-[11px] text-slate-500 font-medium">Swipe guidelines:</span>
-                                <div className="flex items-center gap-1.5">
-                                    <button
-                                        type="button"
-                                        onClick={() => scrollRef(etiquetteScrollRef, 'prev', 300)}
-                                        className="w-7 h-7 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
-                                        aria-label="Previous card"
-                                    >
-                                        <ChevronLeft className="w-3.5 h-3.5" />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => scrollRef(etiquetteScrollRef, 'next', 300)}
-                                        className="w-7 h-7 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
-                                        aria-label="Next card"
-                                    >
-                                        <ChevronRight className="w-3.5 h-3.5" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div 
-                                ref={etiquetteScrollRef}
-                                className="flex md:grid md:grid-cols-2 gap-4 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar pb-2 md:pb-0 touch-pan-x"
-                            >
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-8">
                                 {/* Eco Guidelines */}
-                                <div className="shrink-0 w-[84vw] max-w-[340px] md:w-auto snap-center bg-emerald-50/70 p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-emerald-200/80">
-                                    <h4 className="text-base sm:text-lg font-bold text-emerald-950 font-display flex items-center gap-2">
+                                <div className="bg-emerald-50/70 p-4 sm:p-8 rounded-xl sm:rounded-3xl border border-emerald-200/80">
+                                    <h4 className="text-sm sm:text-lg font-bold text-emerald-950 font-display flex items-center gap-2">
                                         <Leaf className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
                                         <span>Ecological Preservation Rules</span>
                                     </h4>
-                                    <ul className="mt-3 sm:mt-4 space-y-2.5 sm:space-y-3">
+                                    <ul className="mt-2.5 sm:mt-4 space-y-2 sm:space-y-3">
                                         {TRAVEL_GUIDELINES.ecoRules.map((rule, idx) => (
-                                            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-emerald-900 leading-relaxed">
+                                            <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-emerald-900 leading-relaxed">
                                                 <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 shrink-0 mt-0.5" />
                                                 <span>{rule}</span>
                                             </li>
@@ -240,14 +188,14 @@ export default function TravelGuideSection() {
                                 </div>
 
                                 {/* Packing Recommendations */}
-                                <div className="shrink-0 w-[84vw] max-w-[340px] md:w-auto snap-center bg-slate-50 p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200">
-                                    <h4 className="text-base sm:text-lg font-bold text-slate-900 font-display flex items-center gap-2">
+                                <div className="bg-slate-50 p-4 sm:p-8 rounded-xl sm:rounded-3xl border border-slate-200">
+                                    <h4 className="text-sm sm:text-lg font-bold text-slate-900 font-display flex items-center gap-2">
                                         <Luggage className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />
                                         <span>What to Bring (Packing Essentials)</span>
                                     </h4>
-                                    <ul className="mt-3 sm:mt-4 space-y-2.5 sm:space-y-3">
+                                    <ul className="mt-2.5 sm:mt-4 space-y-2 sm:space-y-3">
                                         {TRAVEL_GUIDELINES.packingList.map((item, idx) => (
-                                            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                                            <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700 leading-relaxed">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-teal-500 mt-1.5 shrink-0"></span>
                                                 <span>{item}</span>
                                             </li>
@@ -261,43 +209,17 @@ export default function TravelGuideSection() {
                     {/* 3. Budget Tab */}
                     {openTab === 'budget' && (
                         <div className="space-y-3 animate-in fade-in duration-200">
-                            {/* Mobile Carousel Controls */}
-                            <div className="flex md:hidden items-center justify-between px-1">
-                                <span className="text-[11px] text-slate-500 font-medium">Swipe budget options:</span>
-                                <div className="flex items-center gap-1.5">
-                                    <button
-                                        type="button"
-                                        onClick={() => scrollRef(budgetScrollRef, 'prev', 290)}
-                                        className="w-7 h-7 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
-                                        aria-label="Previous budget"
-                                    >
-                                        <ChevronLeft className="w-3.5 h-3.5" />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => scrollRef(budgetScrollRef, 'next', 290)}
-                                        className="w-7 h-7 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
-                                        aria-label="Next budget"
-                                    >
-                                        <ChevronRight className="w-3.5 h-3.5" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div 
-                                ref={budgetScrollRef}
-                                className="flex md:grid md:grid-cols-2 gap-4 sm:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar pb-2 md:pb-0 touch-pan-x"
-                            >
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-6">
                                 {budgetBreakdown.map((b, idx) => (
-                                    <div key={idx} className="shrink-0 w-[82vw] max-w-[320px] md:w-auto snap-center p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
-                                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full">
+                                    <div key={idx} className="p-4 sm:p-8 rounded-xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-xs hover:shadow-md transition-shadow">
+                                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full">
                                             {b.tier}
                                         </span>
-                                        <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-display mt-3 sm:mt-4">
-                                            {b.daily} <span className="text-[11px] sm:text-xs font-normal text-slate-500">/ day / person</span>
+                                        <div className="text-xl sm:text-3xl font-extrabold text-slate-900 font-display mt-2 sm:mt-4">
+                                            {b.daily} <span className="text-[10px] sm:text-xs font-normal text-slate-500">/ day / person</span>
                                         </div>
 
-                                        <div className="mt-4 sm:mt-6 space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-slate-600 border-t border-slate-100 pt-3 sm:pt-4">
+                                        <div className="mt-3 sm:mt-6 space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-600 border-t border-slate-100 pt-2.5 sm:pt-4">
                                             <div>
                                                 <span className="font-bold text-slate-800">Accommodation:</span>
                                                 <p className="text-slate-600 mt-0.5">{b.stay}</p>
@@ -320,47 +242,21 @@ export default function TravelGuideSection() {
                     {/* 4. Hotlines Tab */}
                     {openTab === 'hotlines' && (
                         <div className="space-y-3 sm:space-y-4 animate-in fade-in duration-200">
-                            <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-rose-50 border border-rose-200 text-xs sm:text-sm text-rose-900 flex items-center gap-2.5 sm:gap-3">
+                            <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-rose-50 border border-rose-200 text-xs sm:text-sm text-rose-900 flex items-center gap-2 sm:gap-3">
                                 <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-rose-600 shrink-0" />
                                 <span>Save these numbers prior to travel. In case of coastal typhoons or emergency coast guard warnings, dispatch centers provide real-time sea advisory bulletins.</span>
                             </div>
 
-                            {/* Mobile Carousel Controls */}
-                            <div className="flex sm:hidden items-center justify-between px-1">
-                                <span className="text-[11px] text-slate-500 font-medium">Swipe emergency hotlines:</span>
-                                <div className="flex items-center gap-1.5">
-                                    <button
-                                        type="button"
-                                        onClick={() => scrollRef(hotlineScrollRef, 'prev', 220)}
-                                        className="w-7 h-7 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
-                                        aria-label="Previous hotline"
-                                    >
-                                        <ChevronLeft className="w-3.5 h-3.5" />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => scrollRef(hotlineScrollRef, 'next', 220)}
-                                        className="w-7 h-7 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
-                                        aria-label="Next hotline"
-                                    >
-                                        <ChevronRight className="w-3.5 h-3.5" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div 
-                                ref={hotlineScrollRef}
-                                className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar pb-2 sm:pb-0 touch-pan-x"
-                            >
+                            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
                                 {EMERGENCY_HOTLINES.map((hotline, idx) => (
-                                    <div key={idx} className="shrink-0 w-[72vw] max-w-[240px] sm:w-auto snap-center p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200 hover:border-rose-300 transition-colors flex flex-col justify-between">
-                                        <div className="flex items-center justify-between text-[11px] sm:text-xs font-semibold text-slate-500 mb-1">
+                                    <div key={idx} className="p-2.5 sm:p-5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200 hover:border-rose-300 transition-colors flex flex-col justify-between">
+                                        <div className="flex items-center justify-between text-[10px] sm:text-xs font-semibold text-slate-500 mb-0.5">
                                             <span>{hotline.available}</span>
                                         </div>
-                                        <h5 className="font-bold text-slate-900 text-xs sm:text-sm font-display">{hotline.name}</h5>
-                                        <p className="text-xs sm:text-base font-bold text-rose-600 font-mono mt-2 flex items-center gap-1.5">
-                                            <PhoneCall className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                                            <span>{hotline.number}</span>
+                                        <h5 className="font-bold text-slate-900 text-[11px] sm:text-sm font-display truncate">{hotline.name}</h5>
+                                        <p className="text-xs sm:text-base font-bold text-rose-600 font-mono mt-1.5 flex items-center gap-1">
+                                            <PhoneCall className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" />
+                                            <span className="truncate">{hotline.number}</span>
                                         </p>
                                     </div>
                                 ))}

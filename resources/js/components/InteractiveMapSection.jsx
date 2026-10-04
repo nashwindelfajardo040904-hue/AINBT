@@ -16,26 +16,48 @@ export default function InteractiveMapSection({ onSelectMunicipality }) {
     const [activeMun, setActiveMun] = useState(MUNICIPALITIES[0]);
 
     return (
-        <section id="map" className="py-20 bg-white relative">
+        <section id="map" className="py-10 sm:py-20 bg-white relative">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="text-center max-w-3xl mx-auto">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-100 text-teal-800 text-xs font-bold uppercase tracking-wider mb-3">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-100 text-teal-800 text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3">
                         <Navigation className="w-3.5 h-3.5 text-teal-600" />
                         Interactive Provincial Destination Map
                     </div>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 font-display tracking-tight">
+                    <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 font-display tracking-tight">
                         Explore Oriental Mindoro’s 15 Hubs
                     </h2>
-                    <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
+                    <p className="mt-2 sm:mt-4 text-xs sm:text-lg text-slate-600 leading-relaxed">
                         Click on any municipality from the northern dive waters of Puerto Galera to the southern pristine sandbars of Bulalacao to reveal travel guides, ports, and highlights.
                     </p>
                 </div>
 
+                {/* Mobile Quick Town Selector */}
+                <div className="mt-6 block lg:hidden">
+                    <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-teal-600" />
+                        <span>Select Municipal Hub ({MUNICIPALITIES.length} Towns):</span>
+                    </label>
+                    <select
+                        value={activeMun.name}
+                        onChange={(e) => {
+                            const found = MUNICIPALITIES.find(m => m.name === e.target.value);
+                            if (found) setActiveMun(found);
+                        }}
+                        className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer shadow-xs"
+                    >
+                        {MUNICIPALITIES.map(m => (
+                            <option key={m.name} value={m.name}>
+                                {m.name} — {m.category}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
                 {/* 2-Column: Municipal Hub Selector + Interactive Detail View */}
-                <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    {/* Municipal List Selector (Left 5 Cols) */}
-                    <div className="lg:col-span-5 bg-slate-50 p-4 rounded-3xl border border-slate-200/90 shadow-sm max-h-[600px] overflow-y-auto space-y-2">
+                <div className="mt-4 sm:mt-14 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+                    {/* Municipal List Selector (Desktop Only: Left 5 Cols) */}
+                    <div className="hidden lg:block lg:col-span-5 bg-slate-50 p-4 rounded-3xl border border-slate-200/90 shadow-sm max-h-[600px] overflow-y-auto space-y-2">
                         <p className="text-xs font-bold text-slate-500 uppercase tracking-wider px-2 py-1">
                             Select a Municipality ({MUNICIPALITIES.length} Hubs)
                         </p>
@@ -79,7 +101,7 @@ export default function InteractiveMapSection({ onSelectMunicipality }) {
                     </div>
 
                     {/* Interactive Municipal Display Hub (Right 7 Cols) */}
-                    <div className="lg:col-span-7 bg-gradient-to-br from-slate-900 via-slate-800 to-teal-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden border border-slate-700">
+                    <div className="lg:col-span-7 bg-gradient-to-br from-slate-900 via-slate-800 to-teal-950 rounded-2xl sm:rounded-3xl p-4 sm:p-8 text-white shadow-xl relative overflow-hidden border border-slate-700">
                         {/* Decorative Background Graphics */}
                         <div className="absolute top-0 right-0 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -135,14 +157,14 @@ export default function InteractiveMapSection({ onSelectMunicipality }) {
                             </div>
 
                             {/* Action to Filter by this town */}
-                            <div className="pt-2 flex items-center justify-between">
+                            <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                 <p className="text-xs text-slate-400">
                                     Provincial District • Oriental Mindoro, Philippines
                                 </p>
 
                                 <button
                                     onClick={() => onSelectMunicipality(activeMun.name)}
-                                    className="px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 hover:scale-105 active:scale-95 shadow-md shadow-teal-500/20"
+                                    className="w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 hover:scale-105 active:scale-95 shadow-md shadow-teal-500/20"
                                 >
                                     <span>View Attractions in {activeMun.name}</span>
                                     <ArrowRight className="w-4 h-4" />

@@ -112,29 +112,29 @@ export default function GallerySection() {
         : photos.filter(p => p.category === activeFilter);
 
     return (
-        <section id="gallery" className="py-20 bg-slate-100/60 relative">
+        <section id="gallery" className="py-10 sm:py-20 bg-slate-100/60 relative">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="text-center max-w-3xl mx-auto">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-100 text-teal-800 text-xs font-bold uppercase tracking-wider mb-3">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-100 text-teal-800 text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3">
                         <ImageIcon className="w-3.5 h-3.5 text-teal-600" />
                         Visual Tourism Showcase
                     </div>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 font-display tracking-tight">
+                    <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 font-display tracking-tight">
                         Postcards from Oriental Mindoro
                     </h2>
-                    <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
+                    <p className="mt-2 sm:mt-4 text-xs sm:text-lg text-slate-600 leading-relaxed">
                         Immerse yourself in breathtaking captures of our sapphire waters, tranquil lake reflections, living indigenous traditions, and dramatic tropical mountains.
                     </p>
                 </div>
 
                 {/* Filter Tabs */}
-                <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+                <div className="mt-5 sm:mt-10 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
                     {filterCategories.map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setActiveFilter(cat)}
-                            className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all ${
+                            className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-sm font-semibold transition-all ${
                                 activeFilter === cat
                                     ? 'bg-slate-900 text-white shadow-md'
                                     : 'bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-200 border border-slate-200'
@@ -145,39 +145,16 @@ export default function GallerySection() {
                     ))}
                 </div>
 
-                {/* Mobile Carousel Controls (Visible only on mobile) */}
-                <div className="flex sm:hidden items-center justify-between mt-4 px-1">
-                    <span className="text-xs text-slate-500 font-medium">Swipe photos or use arrows:</span>
-                    <div className="flex items-center gap-2">
-                        <button
-                            type="button"
-                            onClick={() => scrollGallery('prev')}
-                            className="w-8 h-8 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
-                            aria-label="Previous photo"
-                        >
-                            <ChevronLeft className="w-4 h-4" />
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => scrollGallery('next')}
-                            className="w-8 h-8 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
-                            aria-label="Next photo"
-                        >
-                            <ChevronRight className="w-4 h-4" />
-                        </button>
-                    </div>
-                </div>
-
-                {/* Photo Grid (Mobile: 1 horizontal snap row, Desktop: 3-col grid) */}
+                {/* Photo Grid (Mobile: 2-col compact grid, Desktop: 3-col grid) */}
                 <div 
                     ref={galleryScrollRef}
-                    className="mt-4 sm:mt-10 flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar pb-3 sm:pb-0 touch-pan-x"
+                    className="mt-6 sm:mt-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-6 pb-3 sm:pb-0"
                 >
                     {filteredPhotos.map((photo) => (
                         <div
                             key={photo.id}
                             onClick={() => setSelectedPhoto(photo)}
-                            className="shrink-0 w-[78vw] max-w-[280px] sm:w-auto snap-center group relative h-60 sm:h-72 rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200"
+                            className="group relative h-32 sm:h-72 rounded-xl sm:rounded-3xl overflow-hidden cursor-pointer shadow-xs hover:shadow-xl transition-all duration-300 border border-slate-200"
                         >
                             <img 
                                 src={photo.url} 
@@ -185,28 +162,28 @@ export default function GallerySection() {
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                 loading="lazy"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent opacity-85 group-hover:opacity-95 transition-opacity"></div>
 
                             {/* Hover Expansion Icon */}
-                            <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Maximize2 className="w-4 h-4" />
+                            <div className="absolute top-2 right-2 sm:top-4 sm:right-4 w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             </div>
 
                             {/* Category Badge */}
-                            <div className="absolute top-4 left-4 px-2.5 py-0.5 rounded-md bg-teal-600 text-white text-[11px] font-bold">
+                            <div className="absolute top-2 left-2 sm:top-4 sm:left-4 px-1.5 sm:px-2.5 py-0.5 rounded-md bg-teal-600/90 text-white text-[9px] sm:text-[11px] font-bold">
                                 {photo.category}
                             </div>
 
                             {/* Bottom Caption Overlay */}
-                            <div className="absolute bottom-4 left-4 right-4 text-white">
-                                <p className="text-xs text-teal-300 font-semibold flex items-center gap-1 mb-0.5">
-                                    <MapPin className="w-3.5 h-3.5" />
-                                    <span>{photo.location}</span>
+                            <div className="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 text-white">
+                                <p className="text-[9px] sm:text-xs text-teal-300 font-semibold flex items-center gap-0.5 sm:gap-1 mb-0.5 truncate">
+                                    <MapPin className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 shrink-0" />
+                                    <span className="truncate">{photo.location}</span>
                                 </p>
-                                <h4 className="text-base font-bold font-display group-hover:text-teal-200 transition-colors">
+                                <h4 className="text-[11px] sm:text-base font-bold font-display group-hover:text-teal-200 transition-colors truncate">
                                     {photo.title}
                                 </h4>
-                                <p className="text-xs text-slate-300 line-clamp-1 mt-1">
+                                <p className="hidden sm:block text-xs text-slate-300 line-clamp-1 mt-1">
                                     {photo.caption}
                                 </p>
                             </div>
@@ -217,45 +194,45 @@ export default function GallerySection() {
 
             {/* Lightbox Modal */}
             {selectedPhoto && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-200">
-                    <div className="relative max-w-4xl w-full bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-700">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in duration-200">
+                    <div className="relative max-w-4xl w-full bg-slate-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-slate-700 max-h-[88vh] overflow-y-auto m-2 sm:m-4">
                         {/* Close button */}
                         <button
                             onClick={() => setSelectedPhoto(null)}
-                            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                            className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center transition-colors"
                         >
-                            <X className="w-6 h-6" />
+                            <X className="w-4 h-4 sm:w-6 sm:h-6" />
                         </button>
 
-                        <div className="max-h-[70vh] w-full flex items-center justify-center bg-black">
+                        <div className="max-h-[50vh] sm:max-h-[70vh] w-full flex items-center justify-center bg-black">
                             <img 
                                 src={selectedPhoto.url} 
                                 alt={selectedPhoto.title}
-                                className="max-h-[70vh] w-full object-contain"
+                                className="max-h-[50vh] sm:max-h-[70vh] w-full object-contain"
                             />
                         </div>
 
                         {/* Modal Footer Caption */}
-                        <div className="p-6 bg-slate-900 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="p-4 sm:p-6 bg-slate-900 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
                             <div>
                                 <div className="flex items-center gap-2">
-                                    <span className="px-2 py-0.5 rounded bg-teal-600 text-xs font-bold uppercase">
+                                    <span className="px-2 py-0.5 rounded bg-teal-600 text-[10px] sm:text-xs font-bold uppercase">
                                         {selectedPhoto.category}
                                     </span>
-                                    <span className="text-xs text-teal-400 font-medium flex items-center gap-1">
-                                        <MapPin className="w-3.5 h-3.5" />
+                                    <span className="text-[11px] sm:text-xs text-teal-400 font-medium flex items-center gap-1">
+                                        <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                                         {selectedPhoto.location}, Oriental Mindoro
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-bold font-display mt-1 text-white">
+                                <h3 className="text-base sm:text-xl font-bold font-display mt-1 text-white">
                                     {selectedPhoto.title}
                                 </h3>
-                                <p className="text-xs text-slate-300 mt-1">
+                                <p className="text-xs text-slate-300 mt-0.5 sm:mt-1">
                                     {selectedPhoto.caption}
                                 </p>
                             </div>
 
-                            <div className="text-right text-[11px] text-slate-400 shrink-0">
+                            <div className="text-left sm:text-right text-[10px] sm:text-[11px] text-slate-400 shrink-0">
                                 <span>Photo Credit:</span>
                                 <p className="font-semibold text-slate-200">{selectedPhoto.credit}</p>
                             </div>
