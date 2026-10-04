@@ -152,9 +152,9 @@ export default function HeroSection({ onOpenBooking, onSearch, onSelectCategory,
     };
 
     return (
-        <section id="home" className="relative min-h-[92vh] flex items-center justify-center pt-24 pb-16 overflow-hidden">
-            {/* Background Image with Rich Coastal Gradient */}
-            <div className="absolute inset-0 z-0">
+        <section id="home" className="relative min-h-[92vh] flex items-center justify-center pt-24 pb-16">
+            {/* Background Image & Glowing Accent Orbs (Clipped inside overflow-hidden background) */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <img 
                     src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85" 
                     alt="Oriental Mindoro Coastline"
@@ -162,14 +162,14 @@ export default function HeroSection({ onOpenBooking, onSearch, onSelectCategory,
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/75 to-teal-950/70"></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/50"></div>
+
+                {/* Glowing Accent Orbs */}
+                <div className="absolute top-1/4 left-10 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
             </div>
 
-            {/* Glowing Accent Orbs */}
-            <div className="absolute top-1/4 left-10 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
-
             {/* Content Container */}
-            <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white mt-6">
+            <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white mt-6">
                 {/* Destination Tag */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold tracking-wide uppercase text-teal-300 mb-6 shadow-inner animate-in fade-in duration-500">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
@@ -188,131 +188,134 @@ export default function HeroSection({ onOpenBooking, onSearch, onSelectCategory,
                 </p>
 
                 {/* Quick Interactive Search Bar with Live Recommendations */}
-                <div ref={searchContainerRef} className="mt-8 max-w-3xl mx-auto relative">
-                    <form 
-                        onSubmit={handleSearchSubmit}
-                        className="p-2 sm:p-3 rounded-2xl bg-white/95 backdrop-blur-xl shadow-2xl border border-white/40 flex flex-col sm:flex-row gap-2.5 items-center text-slate-800"
-                    >
-                        {/* Search Text Input */}
-                        <div className="flex-1 w-full flex items-center gap-2.5 px-3 py-2 bg-slate-50 rounded-xl border border-slate-200/80 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all">
-                            <Search className="w-5 h-5 text-teal-600 shrink-0" />
-                            <input 
-                                type="text"
-                                value={searchTerm}
-                                onChange={(e) => {
-                                    setSearchTerm(e.target.value);
-                                    setIsDropdownOpen(true);
-                                    setHighlightedIndex(-1);
-                                }}
-                                onFocus={() => setIsDropdownOpen(true)}
-                                onKeyDown={handleKeyDown}
-                                placeholder="Search destinations (type 'W' for White Beach, 'T' for Tamaraw...)"
-                                className="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
-                            />
-                            {searchTerm && (
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setSearchTerm('');
-                                        onSearch({ searchTerm: '', municipality: selectedMun });
-                                    }}
-                                    className="p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors"
-                                    title="Clear search"
-                                >
-                                    <X className="w-4 h-4" />
-                                </button>
-                            )}
-                        </div>
-
-                        {/* Municipality Select */}
-                        <div className="w-full sm:w-56 flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-200/80">
-                            <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
-                            <select 
-                                value={selectedMun}
-                                onChange={(e) => {
-                                    setSelectedMun(e.target.value);
-                                    onSearch({ searchTerm, municipality: e.target.value });
-                                }}
-                                className="w-full bg-transparent text-sm text-slate-700 focus:outline-none cursor-pointer"
-                            >
-                                <option value="">All Municipalities</option>
-                                <option value="Puerto Galera">Puerto Galera</option>
-                                <option value="Calapan City">Calapan City</option>
-                                <option value="Naujan">Naujan</option>
-                                <option value="San Teodoro">San Teodoro</option>
-                                <option value="Bulalacao">Bulalacao</option>
-                                <option value="Baco">Baco</option>
-                                <option value="Mansalay">Mansalay</option>
-                            </select>
-                        </div>
-
-                        {/* Explore CTA Button */}
-                        <button 
-                            type="submit"
-                            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold text-sm tracking-wide shadow-md shadow-teal-700/30 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all shrink-0"
+                <div ref={searchContainerRef} className="mt-8 max-w-3xl mx-auto relative z-40">
+                    {/* Search Input Bar & Attached Dropdown Container */}
+                    <div className="relative">
+                        <form 
+                            onSubmit={handleSearchSubmit}
+                            className="p-2 sm:p-3 rounded-2xl bg-white/95 backdrop-blur-xl shadow-2xl border border-white/60 flex flex-col sm:flex-row gap-2.5 items-center text-slate-800"
                         >
-                            <span>Explore</span>
-                            <ArrowRight className="w-4 h-4" />
-                        </button>
-                    </form>
-
-                    {/* Suggestions Dropdown (appears on click or typing) */}
-                    {isDropdownOpen && (
-                        <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-30 text-left text-slate-800 animate-in fade-in slide-in-from-top-2 duration-150">
-                            <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                                <span>{searchTerm ? `Top Matching Destinations (${suggestions.length})` : 'Popular Destinations (Click to explore)'}</span>
-                                {searchTerm && <span className="text-[10px] text-teal-600 font-semibold">Sorted by relevance</span>}
-                            </div>
-
-                            <div className="max-h-72 overflow-y-auto divide-y divide-slate-100">
-                                {suggestions.length > 0 ? (
-                                    suggestions.map((item, index) => {
-                                        const isHighlighted = highlightedIndex === index;
-                                        return (
-                                            <div
-                                                key={item.id || index}
-                                                onClick={() => handleSelectSuggestion(item)}
-                                                onMouseEnter={() => setHighlightedIndex(index)}
-                                                className={`px-4 py-3 cursor-pointer flex items-center justify-between transition-colors ${
-                                                    isHighlighted ? 'bg-teal-50/80 text-teal-900' : 'hover:bg-slate-50'
-                                                }`}
-                                            >
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
-                                                        <Palmtree className="w-4 h-4" />
-                                                    </div>
-                                                    <div>
-                                                        <h4 className="text-sm font-bold text-slate-900">
-                                                            {highlightMatch(item.name, searchTerm)}
-                                                        </h4>
-                                                        <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                                                            <MapPin className="w-3 h-3 text-teal-600" />
-                                                            <span>{highlightMatch(item.municipality, searchTerm)}, Oriental Mindoro</span>
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex items-center gap-2">
-                                                    <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-semibold hidden sm:inline-block">
-                                                        {item.category}
-                                                    </span>
-                                                    <ArrowRight className="w-4 h-4 text-teal-600 opacity-60" />
-                                                </div>
-                                            </div>
-                                        );
-                                    })
-                                ) : (
-                                    <div className="px-4 py-8 text-center text-xs text-slate-500">
-                                        <p className="font-semibold text-slate-700">No destinations found for "{searchTerm}"</p>
-                                        <p className="mt-1 text-slate-400">Try searching for "White Beach", "Tamaraw", or "Naujan".</p>
-                                    </div>
+                            {/* Search Text Input */}
+                            <div className="flex-1 w-full flex items-center gap-2.5 px-3 py-2 bg-slate-50 rounded-xl border border-slate-200/80 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all">
+                                <Search className="w-5 h-5 text-teal-600 shrink-0" />
+                                <input 
+                                    type="text"
+                                    value={searchTerm}
+                                    onChange={(e) => {
+                                        setSearchTerm(e.target.value);
+                                        setIsDropdownOpen(true);
+                                        setHighlightedIndex(-1);
+                                    }}
+                                    onFocus={() => setIsDropdownOpen(true)}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Search destinations (type 'W' for White Beach, 'T' for Tamaraw...)"
+                                    className="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+                                />
+                                {searchTerm && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setSearchTerm('');
+                                            onSearch({ searchTerm: '', municipality: selectedMun });
+                                        }}
+                                        className="p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors"
+                                        title="Clear search"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
                                 )}
                             </div>
-                        </div>
-                    )}
+
+                            {/* Municipality Select */}
+                            <div className="w-full sm:w-56 flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-200/80">
+                                <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
+                                <select 
+                                    value={selectedMun}
+                                    onChange={(e) => {
+                                        setSelectedMun(e.target.value);
+                                        onSearch({ searchTerm, municipality: e.target.value });
+                                    }}
+                                    className="w-full bg-transparent text-sm text-slate-700 focus:outline-none cursor-pointer"
+                                >
+                                    <option value="">All Municipalities</option>
+                                    <option value="Puerto Galera">Puerto Galera</option>
+                                    <option value="Calapan City">Calapan City</option>
+                                    <option value="Naujan">Naujan</option>
+                                    <option value="San Teodoro">San Teodoro</option>
+                                    <option value="Bulalacao">Bulalacao</option>
+                                    <option value="Baco">Baco</option>
+                                    <option value="Mansalay">Mansalay</option>
+                                </select>
+                            </div>
+
+                            {/* Explore CTA Button */}
+                            <button 
+                                type="submit"
+                                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold text-sm tracking-wide shadow-md shadow-teal-700/30 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all shrink-0 cursor-pointer"
+                            >
+                                <span>Explore</span>
+                                <ArrowRight className="w-4 h-4" />
+                            </button>
+                        </form>
+
+                        {/* Suggestions Dropdown (Directly under search bar, zero gap, floating on top of everything) */}
+                        {isDropdownOpen && (
+                            <div className="absolute left-0 right-0 top-full mt-1 bg-white rounded-2xl shadow-2xl border border-slate-200/90 overflow-hidden z-50 text-left text-slate-800 animate-in fade-in slide-in-from-top-1 duration-150">
+                                <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <span>{searchTerm ? `Top Matching Destinations (${suggestions.length})` : 'Popular Destinations (Click to explore)'}</span>
+                                    {searchTerm && <span className="text-[10px] text-teal-600 font-semibold">Sorted by relevance</span>}
+                                </div>
+
+                                <div className="max-h-64 sm:max-h-72 overflow-y-auto divide-y divide-slate-100">
+                                    {suggestions.length > 0 ? (
+                                        suggestions.map((item, index) => {
+                                            const isHighlighted = highlightedIndex === index;
+                                            return (
+                                                <div
+                                                    key={item.id || index}
+                                                    onClick={() => handleSelectSuggestion(item)}
+                                                    onMouseEnter={() => setHighlightedIndex(index)}
+                                                    className={`px-4 py-3 cursor-pointer flex items-center justify-between transition-colors ${
+                                                        isHighlighted ? 'bg-teal-50/90 text-teal-900' : 'hover:bg-slate-50'
+                                                    }`}
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
+                                                            <Palmtree className="w-4 h-4" />
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="text-sm font-bold text-slate-900">
+                                                                {highlightMatch(item.name, searchTerm)}
+                                                            </h4>
+                                                            <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                                                                <MapPin className="w-3 h-3 text-teal-600" />
+                                                                <span>{highlightMatch(item.municipality, searchTerm)}, Oriental Mindoro</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-semibold hidden sm:inline-block">
+                                                            {item.category}
+                                                        </span>
+                                                        <ArrowRight className="w-4 h-4 text-teal-600 opacity-60" />
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    ) : (
+                                        <div className="px-4 py-8 text-center text-xs text-slate-500">
+                                            <p className="font-semibold text-slate-700">No destinations found for "{searchTerm}"</p>
+                                            <p className="mt-1 text-slate-400">Try searching for "White Beach", "Tamaraw", or "Naujan".</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
                     {/* Quick Category Badges */}
-                    <div className="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs">
+                    <div className="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs relative z-10">
                         <span className="text-slate-300 font-medium mr-1">Popular:</span>
                         {quickBadges.map((badge, idx) => (
                             <button
