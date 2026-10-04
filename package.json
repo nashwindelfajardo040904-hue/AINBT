@@ -14,7 +14,8 @@
         "vite": "^8.0.0"
     },
     "optionalDependencies": {
-        "@laravel/multiplex": "^0.4.1"
+        "@laravel/multiplex": "^0.4.1",
+        "@rolldown/binding-linux-x64-gnu": "*"
     },
     "dependencies": {
         "@vitejs/plugin-react": "^6.1.1",
