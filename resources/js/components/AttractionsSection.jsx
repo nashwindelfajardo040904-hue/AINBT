@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
     MapPin, 
     Clock, 
@@ -11,7 +11,9 @@ import {
     X,
     Filter,
     Navigation,
-    Compass
+    Compass,
+    ChevronLeft,
+    ChevronRight
 } from 'lucide-react';
 
 export default function AttractionsSection({ 
@@ -24,6 +26,14 @@ export default function AttractionsSection({
 }) {
     const [selectedAttraction, setSelectedAttraction] = useState(null);
     const [activeMunicipality, setActiveMunicipality] = useState('All');
+    const attractionScrollRef = useRef(null);
+
+    const scrollAttractions = (direction) => {
+        if (attractionScrollRef.current) {
+            const offset = direction === 'next' ? 290 : -290;
+            attractionScrollRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+        }
+    };
 
     const categories = ['All', 'Beach & Marine', 'Eco-Tourism & Lakes', 'Waterfalls & Mountains', 'Cultural Heritage'];
     
@@ -44,7 +54,7 @@ export default function AttractionsSection({
     });
 
     return (
-        <section id="attractions" className="py-20 bg-white relative">
+        <section id="attractions" className="py-12 sm:py-20 bg-white relative">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center max-w-3xl mx-auto">
@@ -52,23 +62,23 @@ export default function AttractionsSection({
                         <Compass className="w-3.5 h-3.5 text-emerald-600" />
                         Destination Showcase
                     </div>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 font-display tracking-tight">
+                    <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 font-display tracking-tight">
                         Iconic Attractions of Oriental Mindoro
                     </h2>
-                    <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
+                    <p className="mt-3 sm:mt-4 text-xs sm:text-lg text-slate-600 leading-relaxed">
                         Explore our top-rated natural wonders, coral marine sanctuaries, dramatic mountain cascades, and rich cultural museums.
                     </p>
                 </div>
 
                 {/* Filters Row */}
-                <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="mt-8 sm:mt-10 flex flex-col md:flex-row items-center justify-between gap-4">
                     {/* Category Filter Pills */}
                     <div className="flex flex-wrap items-center justify-center gap-1.5 p-1.5 bg-slate-100 rounded-2xl max-w-full overflow-x-auto">
                         {categories.map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
-                                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
+                                className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
                                     selectedCategory === cat
                                         ? 'bg-teal-600 text-white shadow-sm'
                                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
@@ -119,15 +129,41 @@ export default function AttractionsSection({
                     </div>
                 )}
 
-                {/* Attractions Grid */}
-                <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* Mobile Carousel Controls (Visible only on mobile) */}
+                <div className="flex md:hidden items-center justify-between mt-6 px-1">
+                    <span className="text-[11px] text-slate-500 font-medium">Swipe attractions or use arrows:</span>
+                    <div className="flex items-center gap-1.5">
+                        <button
+                            type="button"
+                            onClick={() => scrollAttractions('prev')}
+                            className="w-7 h-7 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
+                            aria-label="Previous attraction"
+                        >
+                            <ChevronLeft className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => scrollAttractions('next')}
+                            className="w-7 h-7 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
+                            aria-label="Next attraction"
+                        >
+                            <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Attractions Grid (Mobile: 1 horizontal line, Desktop: 3-col grid) */}
+                <div 
+                    ref={attractionScrollRef}
+                    className="mt-4 md:mt-10 flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar pb-3 md:pb-0 touch-pan-x"
+                >
                     {filtered.map((attraction) => (
                         <div 
                             key={attraction.id}
-                            className="group bg-white rounded-3xl overflow-hidden border border-slate-200/80 hover:border-teal-300 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
+                            className="shrink-0 w-[82vw] max-w-[310px] md:w-auto snap-center group bg-white rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200/80 hover:border-teal-300 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
                         >
                             {/* Card Image Container */}
-                            <div className="relative h-60 w-full overflow-hidden bg-slate-100">
+                            <div className="relative h-48 md:h-60 w-full overflow-hidden bg-slate-100">
                                 <img 
                                     src={attraction.image_url} 
                                     alt={attraction.name}
@@ -160,19 +196,19 @@ export default function AttractionsSection({
                             </div>
 
                             {/* Card Body */}
-                            <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                            <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
                                 <div>
-                                    <h3 className="text-xl font-bold text-slate-900 font-display group-hover:text-teal-700 transition-colors">
+                                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 font-display group-hover:text-teal-700 transition-colors">
                                         {attraction.name}
                                     </h3>
-                                    <p className="mt-2 text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed">
+                                    <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed">
                                         {attraction.description}
                                     </p>
                                 </div>
 
                                 {/* Key Features Snippets */}
                                 {attraction.features && attraction.features.length > 0 && (
-                                    <div className="pt-2 border-t border-slate-100 space-y-1.5">
+                                    <div className="pt-2 border-t border-slate-100 space-y-1 sm:space-y-1.5">
                                         {attraction.features.slice(0, 2).map((feat, idx) => (
                                             <div key={idx} className="flex items-center gap-2 text-xs text-slate-600">
                                                 <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
@@ -183,7 +219,7 @@ export default function AttractionsSection({
                                 )}
 
                                 {/* Card Details Footer: Duration & Availability */}
-                                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                                <div className="pt-2.5 sm:pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                                     <div className="flex items-center gap-1">
                                         <Clock className="w-3.5 h-3.5 text-slate-400" />
                                         <span>{attraction.duration || 'Flexible'}</span>
@@ -195,17 +231,16 @@ export default function AttractionsSection({
                                 <div className="pt-2 grid grid-cols-2 gap-2">
                                     <button
                                         onClick={() => setSelectedAttraction(attraction)}
-                                        className="py-2.5 px-3 rounded-xl border border-slate-300 hover:border-teal-600 text-slate-700 hover:text-teal-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                                        className="py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl border border-slate-300 hover:border-teal-600 text-slate-700 hover:text-teal-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                                     >
                                         <Eye className="w-3.5 h-3.5" />
-                                        <span>View Details</span>
+                                        <span>Details</span>
                                     </button>
-
                                     <button
                                         onClick={() => onBookAttraction(attraction)}
-                                        className="py-2.5 px-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-colors"
+                                        className="py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
                                     >
-                                        <span>Inquire / Book</span>
+                                        <span>Inquire</span>
                                         <ArrowUpRight className="w-3.5 h-3.5" />
                                     </button>
                                 </div>

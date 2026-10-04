@@ -314,9 +314,9 @@ export default function HeroSection({ onOpenBooking, onSearch, onSelectCategory,
                         )}
                     </div>
 
-                    {/* Quick Category Badges */}
-                    <div className="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs relative z-10">
-                        <span className="text-slate-300 font-medium mr-1">Popular:</span>
+                    {/* 1. Horizontal Slidable Popular Badges Row (Mobile: 1 scrollable line, Desktop: centered wrap) */}
+                    <div className="flex items-center sm:justify-center gap-1.5 sm:gap-2 mt-3 sm:mt-4 text-xs relative z-10 overflow-x-auto no-scrollbar py-1 px-1 max-w-full touch-pan-x whitespace-nowrap">
+                        <span className="text-slate-300 font-medium mr-1 shrink-0 text-[11px] sm:text-xs">Popular:</span>
                         {quickBadges.map((badge, idx) => (
                             <button
                                 key={idx}
@@ -325,7 +325,7 @@ export default function HeroSection({ onOpenBooking, onSearch, onSelectCategory,
                                     const el = document.getElementById('attractions');
                                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                                 }}
-                                className="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-slate-200 hover:text-white transition-all backdrop-blur-sm"
+                                className="shrink-0 px-2.5 sm:px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-slate-200 hover:text-white transition-all backdrop-blur-sm text-[11px] sm:text-xs cursor-pointer"
                             >
                                 {badge.label}
                             </button>
@@ -333,14 +333,14 @@ export default function HeroSection({ onOpenBooking, onSearch, onSelectCategory,
                     </div>
                 </div>
 
-                {/* Primary Action Buttons */}
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+                {/* 2. Horizontal 2-Button Action Row (Mobile: 1 row side-by-side, Desktop: centered gap) */}
+                <div className="mt-5 sm:mt-8 flex flex-row items-center justify-center gap-2.5 sm:gap-4 w-full max-w-md mx-auto relative z-10 px-1">
                     <button
                         onClick={() => onOpenBooking()}
-                        className="px-8 py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-teal-500 via-emerald-500 to-teal-600 hover:from-teal-400 hover:to-emerald-400 text-white shadow-xl shadow-teal-500/30 hover:shadow-teal-500/50 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                        className="flex-1 sm:flex-initial px-3.5 sm:px-8 py-2.5 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-teal-500 via-emerald-500 to-teal-600 hover:from-teal-400 hover:to-emerald-400 text-white shadow-xl shadow-teal-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 sm:gap-2 truncate cursor-pointer"
                     >
-                        <CalendarCheck className="w-5 h-5" />
-                        <span>Book a Tour Package</span>
+                        <CalendarCheck className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                        <span className="truncate">Book a Tour</span>
                     </button>
 
                     <button
@@ -348,33 +348,33 @@ export default function HeroSection({ onOpenBooking, onSearch, onSelectCategory,
                             const el = document.getElementById('packages');
                             if (el) el.scrollIntoView({ behavior: 'smooth' });
                         }}
-                        className="px-8 py-3.5 rounded-xl font-bold text-sm bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                        className="flex-1 sm:flex-initial px-3.5 sm:px-8 py-2.5 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 sm:gap-2 truncate cursor-pointer"
                     >
-                        <Compass className="w-5 h-5 text-teal-300" />
-                        <span>View Sample Itineraries</span>
+                        <Compass className="w-4 h-4 sm:w-5 sm:h-5 text-teal-300 shrink-0" />
+                        <span className="truncate">View Itineraries</span>
                     </button>
                 </div>
 
-                {/* Key Metrics / Credibility Strip */}
-                <div className="mt-14 pt-8 border-t border-white/15 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                    <div className="p-3 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10">
-                        <div className="text-2xl sm:text-3xl font-extrabold font-display text-teal-300">15</div>
-                        <p className="text-xs text-slate-300 uppercase tracking-wider font-semibold mt-1">Municipalities & City</p>
+                {/* 3. Horizontal Slidable Metrics Strip (Mobile: 1 scrollable line, Desktop: 4-col grid) */}
+                <div className="mt-5 sm:mt-14 pt-4 sm:pt-8 border-t border-white/15 flex sm:grid sm:grid-cols-4 gap-2 sm:gap-6 text-center overflow-x-auto snap-x snap-mandatory no-scrollbar py-1 px-1 touch-pan-x relative z-10">
+                    <div className="shrink-0 w-28 sm:w-auto p-2 sm:p-3 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10 snap-center">
+                        <div className="text-lg sm:text-3xl font-extrabold font-display text-teal-300">15</div>
+                        <p className="text-[10px] sm:text-xs text-slate-300 uppercase tracking-wider font-semibold mt-0.5 sm:mt-1 truncate">Municipalities</p>
                     </div>
 
-                    <div className="p-3 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10">
-                        <div className="text-2xl sm:text-3xl font-extrabold font-display text-emerald-300">30+</div>
-                        <p className="text-xs text-slate-300 uppercase tracking-wider font-semibold mt-1">World-Class Dive Sites</p>
+                    <div className="shrink-0 w-28 sm:w-auto p-2 sm:p-3 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10 snap-center">
+                        <div className="text-lg sm:text-3xl font-extrabold font-display text-emerald-300">30+</div>
+                        <p className="text-[10px] sm:text-xs text-slate-300 uppercase tracking-wider font-semibold mt-0.5 sm:mt-1 truncate">Dive Sites</p>
                     </div>
 
-                    <div className="p-3 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10">
-                        <div className="text-2xl sm:text-3xl font-extrabold font-display text-cyan-300">5th Largest</div>
-                        <p className="text-xs text-slate-300 uppercase tracking-wider font-semibold mt-1">Lake in the Philippines</p>
+                    <div className="shrink-0 w-32 sm:w-auto p-2 sm:p-3 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10 snap-center">
+                        <div className="text-lg sm:text-3xl font-extrabold font-display text-cyan-300">5th Largest</div>
+                        <p className="text-[10px] sm:text-xs text-slate-300 uppercase tracking-wider font-semibold mt-0.5 sm:mt-1 truncate">Lake in PH</p>
                     </div>
 
-                    <div className="p-3 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10">
-                        <div className="text-2xl sm:text-3xl font-extrabold font-display text-amber-300">UNESCO</div>
-                        <p className="text-xs text-slate-300 uppercase tracking-wider font-semibold mt-1">Biosphere Reserve</p>
+                    <div className="shrink-0 w-32 sm:w-auto p-2 sm:p-3 rounded-2xl bg-white/5 backdrop-blur-xs border border-white/10 snap-center">
+                        <div className="text-lg sm:text-3xl font-extrabold font-display text-amber-300">UNESCO</div>
+                        <p className="text-[10px] sm:text-xs text-slate-300 uppercase tracking-wider font-semibold mt-0.5 sm:mt-1 truncate">Biosphere Reserve</p>
                     </div>
                 </div>
             </div>

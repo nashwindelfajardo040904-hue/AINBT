@@ -10,19 +10,29 @@ import {
     ArrowRight, 
     MapPin, 
     Sparkles,
-    FileText
+    FileText,
+    ChevronLeft,
+    ChevronRight
 } from 'lucide-react';
 
 export default function PackagesSection({ packages, onSelectPackage }) {
     const [expandedPackage, setExpandedPackage] = useState(packages[0]?.id || 1);
     const [activeTabDay, setActiveTabDay] = useState({});
+    const packageScrollRef = React.useRef(null);
+
+    const scrollPackages = (direction) => {
+        if (packageScrollRef.current) {
+            const offset = direction === 'next' ? 320 : -320;
+            packageScrollRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+        }
+    };
 
     const toggleExpand = (id) => {
         setExpandedPackage(expandedPackage === id ? null : id);
     };
 
     return (
-        <section id="packages" className="py-20 bg-slate-50 relative">
+        <section id="packages" className="py-12 sm:py-20 bg-slate-50 relative">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="text-center max-w-3xl mx-auto">
@@ -38,8 +48,34 @@ export default function PackagesSection({ packages, onSelectPackage }) {
                     </p>
                 </div>
 
-                {/* Packages List */}
-                <div className="mt-14 space-y-8">
+                {/* Mobile Carousel Controls (Visible only on mobile) */}
+                <div className="flex sm:hidden items-center justify-between mt-6 px-1">
+                    <span className="text-xs text-slate-500 font-medium">Swipe packages or use arrows:</span>
+                    <div className="flex items-center gap-2">
+                        <button
+                            type="button"
+                            onClick={() => scrollPackages('prev')}
+                            className="w-8 h-8 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
+                            aria-label="Previous package"
+                        >
+                            <ChevronLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => scrollPackages('next')}
+                            className="w-8 h-8 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
+                            aria-label="Next package"
+                        >
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Packages List (Mobile: 1 horizontal snap row, Desktop: vertical list) */}
+                <div 
+                    ref={packageScrollRef}
+                    className="mt-4 sm:mt-14 flex sm:flex-col overflow-x-auto sm:overflow-visible snap-x snap-mandatory gap-4 sm:space-y-8 no-scrollbar pb-3 sm:pb-0 touch-pan-x"
+                >
                     {packages.map((pkg, index) => {
                         const isExpanded = expandedPackage === pkg.id;
                         const selectedDay = activeTabDay[pkg.id] || 1;
@@ -47,12 +83,12 @@ export default function PackagesSection({ packages, onSelectPackage }) {
                         return (
                             <div 
                                 key={pkg.id}
-                                className="bg-white rounded-3xl border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+                                className="shrink-0 w-[86vw] max-w-sm sm:w-full snap-center bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between"
                             >
                                 {/* Package Card Summary Row */}
-                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 sm:p-8 items-center">
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 p-4 sm:p-8 items-center">
                                     {/* Thumbnail Image */}
-                                    <div className="lg:col-span-4 relative h-64 sm:h-72 rounded-2xl overflow-hidden bg-slate-100">
+                                    <div className="lg:col-span-4 relative h-48 sm:h-72 rounded-2xl overflow-hidden bg-slate-100">
                                         <img 
                                             src={pkg.image_url} 
                                             alt={pkg.title}

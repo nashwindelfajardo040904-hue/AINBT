@@ -12,6 +12,14 @@ import {
 export default function GallerySection() {
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [activeFilter, setActiveFilter] = useState('All');
+    const galleryScrollRef = React.useRef(null);
+
+    const scrollGallery = (direction) => {
+        if (galleryScrollRef.current) {
+            const offset = direction === 'next' ? 260 : -260;
+            galleryScrollRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+        }
+    };
 
     const photos = [
         {
@@ -137,13 +145,39 @@ export default function GallerySection() {
                     ))}
                 </div>
 
-                {/* Photo Grid */}
-                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Mobile Carousel Controls (Visible only on mobile) */}
+                <div className="flex sm:hidden items-center justify-between mt-4 px-1">
+                    <span className="text-xs text-slate-500 font-medium">Swipe photos or use arrows:</span>
+                    <div className="flex items-center gap-2">
+                        <button
+                            type="button"
+                            onClick={() => scrollGallery('prev')}
+                            className="w-8 h-8 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
+                            aria-label="Previous photo"
+                        >
+                            <ChevronLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => scrollGallery('next')}
+                            className="w-8 h-8 rounded-full bg-white border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-50 active:scale-95 shadow-2xs cursor-pointer"
+                            aria-label="Next photo"
+                        >
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Photo Grid (Mobile: 1 horizontal snap row, Desktop: 3-col grid) */}
+                <div 
+                    ref={galleryScrollRef}
+                    className="mt-4 sm:mt-10 flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto sm:overflow-visible snap-x snap-mandatory no-scrollbar pb-3 sm:pb-0 touch-pan-x"
+                >
                     {filteredPhotos.map((photo) => (
                         <div
                             key={photo.id}
                             onClick={() => setSelectedPhoto(photo)}
-                            className="group relative h-72 rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200"
+                            className="shrink-0 w-[78vw] max-w-[280px] sm:w-auto snap-center group relative h-60 sm:h-72 rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200"
                         >
                             <img 
                                 src={photo.url} 
