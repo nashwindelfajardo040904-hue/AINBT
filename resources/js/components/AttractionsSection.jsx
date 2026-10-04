@@ -18,7 +18,9 @@ export default function AttractionsSection({
     attractions, 
     selectedCategory, 
     setSelectedCategory, 
-    onBookAttraction 
+    onBookAttraction,
+    searchQuery = '',
+    onClearSearch
 }) {
     const [selectedAttraction, setSelectedAttraction] = useState(null);
     const [activeMunicipality, setActiveMunicipality] = useState('All');
@@ -32,7 +34,13 @@ export default function AttractionsSection({
     const filtered = attractions.filter(item => {
         const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
         const matchesMun = activeMunicipality === 'All' || item.municipality === activeMunicipality;
-        return matchesCategory && matchesMun;
+        const q = (searchQuery || '').trim().toLowerCase();
+        const matchesSearch = !q || 
+            item.name.toLowerCase().includes(q) || 
+            item.municipality.toLowerCase().includes(q) || 
+            (item.category && item.category.toLowerCase().includes(q)) ||
+            (item.description && item.description.toLowerCase().includes(q));
+        return matchesCategory && matchesMun && matchesSearch;
     });
 
     return (
@@ -86,6 +94,30 @@ export default function AttractionsSection({
                         </select>
                     </div>
                 </div>
+
+                {/* Active Search / Filter Banner */}
+                {searchQuery && (
+                    <div className="mt-6 flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-teal-50 border border-teal-200/90 text-teal-900 animate-in fade-in">
+                        <div className="flex items-center gap-2 text-xs sm:text-sm">
+                            <span className="font-semibold text-slate-700">Filter applied:</span>
+                            <span className="font-bold bg-teal-600 text-white px-3 py-1 rounded-full text-xs shadow-2xs">
+                                "{searchQuery}"
+                            </span>
+                            <span className="text-teal-800 text-xs">
+                                ({filtered.length} destination{filtered.length === 1 ? '' : 's'} matched)
+                            </span>
+                        </div>
+                        {onClearSearch && (
+                            <button
+                                onClick={onClearSearch}
+                                className="px-3 py-1 rounded-lg bg-white border border-teal-300 hover:bg-teal-100 text-teal-800 font-bold text-xs transition-colors flex items-center gap-1 cursor-pointer"
+                            >
+                                <X className="w-3.5 h-3.5" />
+                                <span>Clear Search</span>
+                            </button>
+                        )}
+                    </div>
+                )}
 
                 {/* Attractions Grid */}
                 <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

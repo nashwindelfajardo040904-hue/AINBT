@@ -23,12 +23,15 @@ Route::get('/reviews', [ReviewController::class, 'index']);
 Route::post('/reviews', [ReviewController::class, 'store']);
 
 // Authentication Endpoints
-Route::post('/auth/login', [AuthController::class, 'login']);
-Route::get('/auth/me', [AuthController::class, 'me']);
-Route::post('/auth/logout', [AuthController::class, 'logout']);
+Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 
-// Admin Management Endpoints
-Route::prefix('admin')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/auth/me', [AuthController::class, 'me']);
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+});
+
+// Admin Management Endpoints (authenticated)
+Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
     // Booking Operations

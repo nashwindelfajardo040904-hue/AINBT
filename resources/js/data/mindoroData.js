@@ -108,7 +108,7 @@ export const MUNICIPALITIES = [
 ];
 
 export const EMERGENCY_HOTLINES = [
-    { name: 'Provincial Tourism Office (Calapan)', number: '(043) 288-7550 / +63 917 845 2210', available: '24/7 Tourist Desk' },
+    { name: 'Developer & Tourism Desk (Nash Windel Fajardo)', number: '0945 240 3583', available: 'Mangahan, Balite, Calapan City' },
     { name: 'PDRRMO Disaster Response (Oriental Mindoro)', number: '(043) 288-7777 / 911', available: 'Emergency Hotline' },
     { name: 'Philippine Coast Guard - Southern Tagalog', number: '+63 929 678 3344 / (043) 288-5120', available: 'Maritime Search & Weather Clearance' },
     { name: 'Puerto Galera Municipal Tourism Desk', number: '+63 917 500 8920', available: 'Visitor Assistance' },

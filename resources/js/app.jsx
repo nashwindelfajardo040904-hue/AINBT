@@ -19,10 +19,8 @@ import BookingModal from './components/BookingModal';
 import SubmissionQrModal from './components/SubmissionQrModal';
 
 // Admin Components
+import AdminLogin from './components/admin/AdminLogin';
 import AdminView from './components/admin/AdminView';
-
-// Icons & Banner
-import { Sparkles, Tag, ArrowRight, ShieldCheck, PhoneCall } from 'lucide-react';
 
 export default function App() {
     const [attractions, setAttractions] = useState([]);
@@ -37,38 +35,66 @@ export default function App() {
     const [isQrOpen, setIsQrOpen] = useState(false);
     const [selectedPackageForBooking, setSelectedPackageForBooking] = useState(null);
 
-    // Filters
+    // Filters & Search
     const [selectedCategory, setSelectedCategory] = useState('All');
+    const [searchFilter, setSearchFilter] = useState('');
 
-    // Authenticated user state
-    const [user, setUser] = useState({ name: 'Provincial Tourism Officer', role: 'admin' });
+    // Admin Auth State
+    const [adminToken, setAdminToken] = useState(() => localStorage.getItem('mindoro_admin_token') || null);
+    const [adminUser, setAdminUser] = useState(null);
 
-    // Initial Data Fetch
-    const fetchData = async () => {
-        try {
-            const [attrRes, pkgRes, revRes] = await Promise.all([
-                axios.get('/api/attractions'),
-                axios.get('/api/packages'),
-                axios.get('/api/reviews'),
-            ]);
-            setAttractions(attrRes.data);
-            setPackages(pkgRes.data);
-            setReviews(revRes.data);
-        } catch (err) {
-            console.error('Failed to load initial data:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
+    // Initial Data Fetch & Auth Verification
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [attrRes, pkgRes, revRes] = await Promise.all([
+                    axios.get('/api/attractions'),
+                    axios.get('/api/packages'),
+                    axios.get('/api/reviews'),
+                ]);
+                setAttractions(attrRes.data);
+                setPackages(pkgRes.data);
+                setReviews(revRes.data);
+            } catch (err) {
+                console.error('Failed to load initial data:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchData();
 
-        // Check if current URL hash or query is #admin
-        if (window.location.pathname.startsWith('/admin') || window.location.hash === '#admin') {
-            setIsAdminOpen(true);
+        // Verify token if present
+        if (adminToken) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${adminToken}`;
+            axios.get('/api/auth/me')
+                .then(res => {
+                    setAdminUser(res.data.user);
+                })
+                .catch(() => {
+                    // Invalid/expired token
+                    localStorage.removeItem('mindoro_admin_token');
+                    delete axios.defaults.headers.common['Authorization'];
+                    setAdminToken(null);
+                    setAdminUser(null);
+                });
         }
-    }, []);
+
+        const checkAdminUrl = () => {
+            if (window.location.pathname.startsWith('/admin') || window.location.hash === '#admin') {
+                setIsAdminOpen(true);
+            }
+        };
+
+        checkAdminUrl();
+        window.addEventListener('hashchange', checkAdminUrl);
+        window.addEventListener('popstate', checkAdminUrl);
+
+        return () => {
+            window.removeEventListener('hashchange', checkAdminUrl);
+            window.removeEventListener('popstate', checkAdminUrl);
+        };
+    }, [adminToken]);
 
     // Handlers
     const handleOpenBooking = (pkg = null) => {
@@ -77,60 +103,84 @@ export default function App() {
     };
 
     const handleBookAttraction = (attraction) => {
-        // Find matching package or use first
         setSelectedPackageForBooking(packages[0]);
         setIsBookingOpen(true);
     };
 
     const handleSearch = ({ searchTerm, municipality }) => {
-        if (municipality) {
+        if (searchTerm) {
+            setSearchFilter(searchTerm);
+        }
+        if (municipality && municipality !== 'All') {
             setSelectedCategory('All');
         }
-    };
-
-    const handleSelectMunicipality = (munName) => {
         const el = document.getElementById('attractions');
         if (el) el.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // If Admin View is active, render the dedicated Admin Portal
+    const handleSelectMunicipality = (munName) => {
+        setSearchFilter(munName);
+        const el = document.getElementById('attractions');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const handleLogout = async () => {
+        try {
+            await axios.post('/api/auth/logout');
+        } catch (e) {
+            // Ignore logout network error
+        }
+        localStorage.removeItem('mindoro_admin_token');
+        delete axios.defaults.headers.common['Authorization'];
+        setAdminToken(null);
+        setAdminUser(null);
+        setIsAdminOpen(false);
+        if (window.location.pathname.startsWith('/admin')) {
+            window.history.pushState(null, '', '/');
+        } else {
+            window.location.hash = '';
+        }
+    };
+
+    const handleCloseAdmin = () => {
+        setIsAdminOpen(false);
+        if (window.location.pathname.startsWith('/admin')) {
+            window.history.pushState(null, '', '/');
+        } else {
+            window.location.hash = '';
+        }
+    };
+
+    // If Admin View is active:
+    // If not authenticated, render AdminLogin
+    // If authenticated, render AdminView
     if (isAdminOpen) {
-        return <AdminView onBackToSite={() => setIsAdminOpen(false)} />;
+        if (!adminToken) {
+            return (
+                <AdminLogin 
+                    onLoginSuccess={(token, loggedUser) => {
+                        localStorage.setItem('mindoro_admin_token', token);
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                        setAdminToken(token);
+                        setAdminUser(loggedUser);
+                    }}
+                    onCancel={handleCloseAdmin}
+                />
+            );
+        }
+
+        return (
+            <AdminView 
+                user={adminUser}
+                onLogout={handleLogout}
+                onBackToSite={handleCloseAdmin}
+                onOpenQr={() => setIsQrOpen(true)}
+            />
+        );
     }
 
     return (
         <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-teal-600 selection:text-white font-sans antialiased text-slate-800">
-            {/* Top Promotional Marketing Bar (Section VI: Promotional offer) */}
-            <div className="bg-gradient-to-r from-teal-900 via-slate-900 to-emerald-900 text-white py-2 px-4 text-xs">
-                <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-                    <div className="flex items-center justify-center gap-2">
-                        <span className="px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 font-extrabold uppercase text-[10px]">
-                            Summer 2026 Promo
-                        </span>
-                        <span className="text-slate-200">
-                            Book any 3D2N Puerto Galera or Bulalacao Package and get <strong>₱500 OFF</strong> per guest!
-                        </span>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <button 
-                            onClick={() => handleOpenBooking()}
-                            className="font-bold text-teal-300 hover:text-white flex items-center gap-1 transition-colors underline underline-offset-4"
-                        >
-                            <span>Claim Discount</span>
-                            <ArrowRight className="w-3 h-3" />
-                        </button>
-
-                        <span className="hidden md:inline text-slate-500">|</span>
-
-                        <span className="hidden md:flex items-center gap-1 text-slate-300">
-                            <PhoneCall className="w-3 h-3 text-teal-400" />
-                            <span>Hotline: (043) 288-7550</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
             {/* Navigation Header */}
             <Navbar 
                 currentTab={currentTab}
@@ -138,13 +188,14 @@ export default function App() {
                 onOpenBooking={() => handleOpenBooking()}
                 onOpenQr={() => setIsQrOpen(true)}
                 onOpenAdmin={() => setIsAdminOpen(true)}
-                user={user}
+                user={adminUser}
             />
 
             {/* Main Sections */}
             <main className="flex-1">
-                {/* 1. Home / Hero Section */}
+                {/* 1. Home / Hero Section with Live Filterable Search */}
                 <HeroSection 
+                    attractions={attractions}
                     onOpenBooking={() => handleOpenBooking()}
                     onSearch={handleSearch}
                     onSelectCategory={(cat) => setSelectedCategory(cat)}
@@ -159,6 +210,8 @@ export default function App() {
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                     onBookAttraction={handleBookAttraction}
+                    searchQuery={searchFilter}
+                    onClearSearch={() => setSearchFilter('')}
                 />
 
                 {/* 4. Tour Packages & Daily Itineraries */}
@@ -205,7 +258,7 @@ export default function App() {
                 selectedPackage={selectedPackageForBooking}
                 packages={packages}
                 onBookingSuccess={(booking) => {
-                    // Update data if needed
+                    // booking success callback
                 }}
             />
 

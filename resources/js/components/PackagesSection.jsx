@@ -41,7 +41,7 @@ export default function PackagesSection({ packages, onSelectPackage }) {
                 {/* Packages List */}
                 <div className="mt-14 space-y-8">
                     {packages.map((pkg, index) => {
-                        const isExpanded = expandedPackage === pkg.id || (expandedPackage === null && index === 0);
+                        const isExpanded = expandedPackage === pkg.id;
                         const selectedDay = activeTabDay[pkg.id] || 1;
 
                         return (

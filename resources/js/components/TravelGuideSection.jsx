@@ -13,7 +13,8 @@ import {
     ChevronUp,
     Sparkles,
     CheckCircle,
-    AlertTriangle
+    AlertTriangle,
+    Clock
 } from 'lucide-react';
 import { EMERGENCY_HOTLINES, TRAVEL_GUIDELINES } from '../data/mindoroData';
 
@@ -131,8 +132,9 @@ export default function TravelGuideSection() {
                                     <div key={idx} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-teal-300 transition-colors">
                                         <div className="flex items-center justify-between">
                                             <span className="text-xs font-bold uppercase tracking-wider text-teal-700">Leg {idx + 1}</span>
-                                            <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-white text-slate-700 border border-slate-200">
-                                                ⏱️ {route.time}
+                                            <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-white text-slate-700 border border-slate-200 flex items-center gap-1.5 shadow-2xs">
+                                                <Clock className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                                                <span>{route.time}</span>
                                             </span>
                                         </div>
                                         <h4 className="text-base font-bold text-slate-900 font-display mt-2">{route.route}</h4>

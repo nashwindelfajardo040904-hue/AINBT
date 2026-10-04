@@ -19,11 +19,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Admin User
+        $adminEmail = env('ADMIN_EMAIL', 'nashwindelfajardo040904@gmail.com');
+
+        User::where('email', 'admin@orientalmindoro.gov.ph')
+            ->where('email', '!=', $adminEmail)
+            ->delete();
+
         User::updateOrCreate(
-            ['email' => 'admin@orientalmindoro.gov.ph'],
+            ['email' => $adminEmail],
             [
-                'name' => 'Provincial Tourism Officer',
-                'password' => Hash::make('admin123'),
+                'name' => 'Nash Windel Fajardo',
+                'password' => Hash::make(env('ADMIN_PASSWORD', 'Mindoro@Nash2026!')),
             ]
         );
 

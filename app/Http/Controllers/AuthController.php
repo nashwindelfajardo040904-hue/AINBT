@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     /**
-     * Authenticate an admin user.
+     * Authenticate an admin user and issue an API token.
      */
     public function login(Request $request): JsonResponse
     {
@@ -19,17 +20,18 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember', true))) {
-            $request->session()->regenerate();
+        $user = User::where('email', $credentials['email'])->first();
 
-            return response()->json([
-                'message' => 'Logged in successfully.',
-                'user' => Auth::user(),
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials do not match our records.'],
             ]);
         }
 
-        throw ValidationException::withMessages([
-            'email' => ['The provided credentials do not match our records.'],
+        return response()->json([
+            'message' => 'Logged in successfully.',
+            'token' => $user->createToken('admin-portal')->plainTextToken,
+            'user' => $user,
         ]);
     }
 
@@ -39,20 +41,17 @@ class AuthController extends Controller
     public function me(Request $request): JsonResponse
     {
         return response()->json([
-            'user' => Auth::user(),
-            'authenticated' => Auth::check(),
+            'user' => $request->user(),
+            'authenticated' => true,
         ]);
     }
 
     /**
-     * Log out the admin user.
+     * Revoke the current admin token.
      */
     public function logout(Request $request): JsonResponse
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $request->user()->currentAccessToken()->delete();
 
         return response()->json([
             'message' => 'Logged out successfully.',

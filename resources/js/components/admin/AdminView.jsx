@@ -22,11 +22,13 @@ import {
     RefreshCw, 
     ShieldCheck, 
     Save, 
-    X 
+    X,
+    LogOut,
+    QrCode
 } from 'lucide-react';
 import axios from 'axios';
 
-export default function AdminView({ onBackToSite }) {
+export default function AdminView({ onBackToSite, onLogout, onOpenQr, adminUser }) {
     const [currentTab, setCurrentTab] = useState('dashboard');
     const [dashboardData, setDashboardData] = useState(null);
     const [bookings, setBookings] = useState([]);
@@ -228,9 +230,19 @@ export default function AdminView({ onBackToSite }) {
                         <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-teal-400' : ''}`} />
                     </button>
                     <div className="text-right text-xs hidden sm:block">
-                        <p className="font-bold text-slate-200">Provincial Tourism Officer</p>
-                        <p className="text-[10px] text-slate-400">admin@orientalmindoro.gov.ph</p>
+                        <p className="font-bold text-slate-200">{adminUser?.name || 'Nash Windel Fajardo'}</p>
+                        <p className="text-[10px] text-slate-400">{adminUser?.email || 'nashwindelfajardo040904@gmail.com'}</p>
                     </div>
+                    {onLogout && (
+                        <button
+                            onClick={onLogout}
+                            className="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                            title="Sign Out"
+                        >
+                            <LogOut className="w-3.5 h-3.5" />
+                            <span className="hidden md:inline">Sign Out</span>
+                        </button>
+                    )}
                 </div>
             </header>
 
@@ -321,6 +333,30 @@ export default function AdminView({ onBackToSite }) {
                             </span>
                         )}
                     </button>
+
+                    <div className="pt-4 border-t border-slate-800/80 mt-4 space-y-1">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 px-3 py-1">
+                            Tools & Submission
+                        </div>
+                        {onOpenQr && (
+                            <button
+                                onClick={onOpenQr}
+                                className="w-full text-left px-3.5 py-2.5 rounded-xl font-semibold text-xs flex items-center gap-2.5 text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+                            >
+                                <QrCode className="w-4 h-4 text-emerald-400" />
+                                <span>Submission QR (Exam)</span>
+                            </button>
+                        )}
+                        {onLogout && (
+                            <button
+                                onClick={onLogout}
+                                className="w-full text-left px-3.5 py-2.5 rounded-xl font-semibold text-xs flex items-center gap-2.5 text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-all md:hidden"
+                            >
+                                <LogOut className="w-4 h-4" />
+                                <span>Sign Out</span>
+                            </button>
+                        )}
+                    </div>
                 </aside>
 
                 {/* Main Content Workspace */}

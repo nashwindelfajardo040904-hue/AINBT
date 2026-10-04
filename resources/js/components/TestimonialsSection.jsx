@@ -165,17 +165,28 @@ export default function TestimonialsSection({ reviews, onNewReviewAdded }) {
 
                                     <div>
                                         <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                                            Rating
+                                            Rating ({rating}/5 Stars)
                                         </label>
-                                        <select 
-                                            value={rating} 
-                                            onChange={(e) => setRating(parseInt(e.target.value))}
-                                            className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"
-                                        >
-                                            <option value={5}>⭐⭐⭐⭐⭐ (5/5 Outstanding)</option>
-                                            <option value={4}>⭐⭐⭐⭐ (4/5 Very Good)</option>
-                                            <option value={3}>⭐⭐⭐ (3/5 Average)</option>
-                                        </select>
+                                        <div className="flex items-center gap-1.5 p-2 bg-slate-50 border border-slate-300 rounded-xl h-[42px]">
+                                            {[1, 2, 3, 4, 5].map((starVal) => (
+                                                <button
+                                                    key={starVal}
+                                                    type="button"
+                                                    onClick={() => setRating(starVal)}
+                                                    className="p-0.5 text-slate-300 hover:text-amber-400 focus:outline-none transition-transform hover:scale-110 active:scale-95"
+                                                    title={`${starVal} Star${starVal > 1 ? 's' : ''}`}
+                                                >
+                                                    <Star 
+                                                        className={`w-5 h-5 transition-colors ${
+                                                            starVal <= rating ? 'fill-amber-400 text-amber-400' : 'text-slate-300'
+                                                        }`} 
+                                                    />
+                                                </button>
+                                            ))}
+                                            <span className="text-[11px] font-bold text-slate-600 ml-1.5 truncate">
+                                                {rating === 5 ? '5/5 Outstanding' : rating === 4 ? '4/5 Very Good' : rating === 3 ? '3/5 Average' : `${rating}/5`}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
