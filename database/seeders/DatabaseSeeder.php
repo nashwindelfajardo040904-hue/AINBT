@@ -27,6 +27,10 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        if (Attraction::query()->exists()) {
+            return;
+        }
+
         // 2. Attractions
         $attractions = [
             [
